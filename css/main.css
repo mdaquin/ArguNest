@@ -1,0 +1,103 @@
+
+*{
+    margin: 0px;
+    padding: 0px;
+    font-family: Helvetica;
+}
+
+#al_login_dialog{
+    background: red;
+}
+
+#al_navbar{
+    background: #800;
+    height: 60px;
+    width:100%;
+}
+
+#al_title{
+    padding-top: 10px;
+    margin-left: 20px;
+    font-size: 30px;
+    color: #ddd;
+    float: left;
+}
+
+.al_button{
+    border: 1px solid #600;
+    border-radius: 10px;
+    color: #ddd;
+    background: #600;
+    padding: 10px 10px 10px 10px;
+}
+
+#al_open_file{
+    float: right;
+    margin-right: 20px;
+    margin-top: 10px;
+}
+
+#al_logout{
+    float: right;
+    margin-right: 20px;
+    margin-top: 10px;
+}
+
+#al_text_panel{
+    background: #fff;
+    height: 100vh;
+    width: 66%;
+}
+
+.al_reference{
+    padding: 20px 20px 10px 20px;
+    font-style: italic;
+}
+
+.al_text{
+    padding: 10px 20px 10px 20px;
+    color: #333;
+    text-align: justify;
+}
+
+#al_annotation_panel{
+    position: fixed;
+    top:60px;
+    right: 0px;
+    background: #fff;
+    width: 33%;
+    height: 200px;
+    padding: 20px; 20px; 20px; 20px;
+}
+
+#al_highlights{
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 5px 5px 5px 5px;
+    border-radius: 10px;
+}
+
+#al_type_buttons{
+    margin-top: 20px;
+}
+
+#al_an_title{
+    width: 100%;
+    padding: 5px 5px 5px 5px;
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.al_an_topic{
+    width: 100%;
+    padding: 5px 5px 5px 5px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+#al_graph_panel{
+    height: 250px;
+    width: 100%;
+    border: 1px solid #666;
+}
