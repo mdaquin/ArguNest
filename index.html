@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="css/main.css">
-    <title>ArguLoom</title>
+    <title>ArguNest</title>
     <script src="js/jquery-3.3.1.js"></script>
     <script src="js/topics.js"></script>
     <script src="js/main.js"></script>    
@@ -15,7 +15,7 @@
     </div>
 
     <div id="al_navbar">
-      <div id="al_title">ArguLoom</div>
+      <div id="al_title">ArguNest</div>
       <div id="al_logout" class="al_button">Logout</div>      
       <div id="al_open_file" class="al_button">Open Text</div>
     </div>
@@ -74,18 +74,23 @@ exclude all love of desire towards him. But this is what I contend for, I would 
 
     <!-- 33% - fixed - 100% y size -->
     <div id="al_annotation_panel">
+      <h2>Concept to highlight</h2>
       <select id="al_highlights">
-	<option value="none">-- highlights --</option>
+	<option value="none">-- concept --</option>
 	<option value="text">Test</option>
       </select>
       <hr />
       <div id="al_type_buttons">
-      <input class="al_Dadio" type="radio" name="an_type" value="argument" checked><span class="al_rad_label">Argument</span>
+      <input class="al_radio" type="radio" name="an_type" value="argument" checked><span class="al_rad_label">Argument</span>
       <input class="al_radio" type="radio" name="an_type" value="proposition"><span class="al_rad_label">Proposition</span>
       </div>
       <input type="text" name="an_title" id="al_an_title" placeholder="title of the argument or proposition"><br/>
+      <div id="al_ref_buttons">
+      <input class="al_radio" type="radio" name="an_ref" value="own" checked><span class="al_rad_label">Stated by the authors</span><br/>
+      <input class="al_radio" type="radio" name="an_ref" value="other"><span class="al_rad_label">Reference to someone else's statement</span>
+      </div>      
       <select id="al_an_topic_1" class="al_an_topic">
-	<option value="none">-- topic --</option>
+	<option value="none">-- concept --</option>
 	<option value="text">Test</option>
       </select>
       <div id="al_graph_panel">
@@ -95,8 +100,3 @@ exclude all love of desire towards him. But this is what I contend for, I would 
   </body>
 </html>
 
-<!-- 
-user management in php... (generate a ukey)
-top bar text div (60% with scroll bar on left)
-fixed (all height widget panel)
---> 

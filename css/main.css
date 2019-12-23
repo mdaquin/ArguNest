@@ -5,6 +5,10 @@
     font-family: Helvetica;
 }
 
+h2 {
+    margin-bottom: 10px;
+}
+
 #al_login_dialog{
     background: red;
 }
@@ -81,6 +85,10 @@
     margin-top: 20px;
 }
 
+#al_ref_buttons{
+    margin-bottom: 20px;
+}
+
 #al_an_title{
     width: 100%;
     padding: 5px 5px 5px 5px;
@@ -100,4 +108,5 @@
     height: 250px;
     width: 100%;
     border: 1px solid #666;
+    margin-top: 20px;
 }
