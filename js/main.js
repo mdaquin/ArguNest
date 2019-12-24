@@ -48,6 +48,39 @@ function dbp_frag(u){
     return u.substring(u.lastIndexOf('/')+1)
 }
 
+function login(){
+    var email = $('#al_useremail').val()
+    var password = $('#al_userpassword').val()
+    if (!email) {
+	$('#al_login_message').html("please provide an email address")
+	return
+    }
+    if (!password) {
+	$('#al_login_message').html("please provide an password")
+	return
+    }
+    $('#al_login_message').html("")
+    $.ajax({
+	type: "POST",
+	url: api_base+'login',
+	data: JSON.stringify({ email: email, password: password }),
+	contentType: "application/json; charset=utf-8",
+	dataType: "json",
+	success: function(data){
+	    if(data.error)
+		$('#al_login_message').html("Error: "+data.error)
+	    else {
+		userkey = data.key		
+		$('#al_login_message').html("Success: "+data.message)
+		$('#al_login_dialog').css('display', 'none')
+	    }
+	},
+	failure: function(errMsg) {
+	    $('#al_login_message').html("Server error: "+errMsg)
+	}
+    });        
+}
+
 function register(){
     var email = $('#al_useremail').val()
     var password = $('#al_userpassword').val()
@@ -67,7 +100,6 @@ function register(){
 	contentType: "application/json; charset=utf-8",
 	dataType: "json",
 	success: function(data){
-	    console.log(data)
 	    if(data.error)
 		$('#al_login_message').html("Error: "+data.error)
 	    else {
