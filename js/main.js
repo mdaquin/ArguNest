@@ -48,6 +48,14 @@ function dbp_frag(u){
     return u.substring(u.lastIndexOf('/')+1)
 }
 
+function logout(){
+    userkey = undefined;
+    $("#al_useremail").val("")
+    $("#al_userpassword").val("")
+    $("#al_login_message").html("")        
+    $("#al_login_dialog").css("display", "block")
+}
+
 function login(){
     var email = $('#al_useremail').val()
     var password = $('#al_userpassword').val()
@@ -56,7 +64,7 @@ function login(){
 	return
     }
     if (!password) {
-	$('#al_login_message').html("please provide an password")
+	$('#al_login_message').html("please provide a password")
 	return
     }
     $('#al_login_message').html("")
@@ -89,7 +97,7 @@ function register(){
 	return
     }
     if (!password) {
-	$('#al_login_message').html("please provide an password")
+	$('#al_login_message').html("please provide a password")
 	return
     }
     $('#al_login_message').html("")
