@@ -1,5 +1,3 @@
-
-
 // check logged in
 // if not show dialog
 // multiple topic dropdown
@@ -12,8 +10,11 @@
 // add stated by the author - reference to someone else's statement
 // free text about how/what is referenced
 
+
+var api_base = 'http://127.0.0.1:5000/'
+
 var currentSelection = {};
-var usekey;
+var userkey;
 
 $( document ).ready(function() {
     fill_select('al_highlights')
@@ -30,6 +31,7 @@ $( document ).ready(function() {
 	    fill_select('al_an_topic_1')
 	}
     });
+    
 });
 
 function fill_select(el){
@@ -44,4 +46,36 @@ function fill_select(el){
 
 function dbp_frag(u){
     return u.substring(u.lastIndexOf('/')+1)
+}
+
+function register(){
+    var email = $('#al_useremail').val()
+    var password = $('#al_userpassword').val()
+    if (!email) {
+	$('#al_login_message').html("please provide an email address")
+	return
+    }
+    if (!password) {
+	$('#al_login_message').html("please provide an password")
+	return
+    }
+    $('#al_login_message').html("")
+    $.ajax({
+	type: "POST",
+	url: api_base+'register',
+	data: JSON.stringify({ email: email, password: password }),
+	contentType: "application/json; charset=utf-8",
+	dataType: "json",
+	success: function(data){
+	    console.log(data)
+	    if(data.error)
+		$('#al_login_message').html("Error: "+data.error)
+	    else {
+		$('#al_login_message').html("Success: "+data.message)
+	    }
+	},
+	failure: function(errMsg) {
+	    $('#al_login_message').html("Server error: "+errMsg)
+	}
+    });    
 }

@@ -10,7 +10,34 @@ h2 {
 }
 
 #al_login_dialog{
-    background: red;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: white;
+    width: 100vw;
+    height: 100vh;
+    padding-top: 20%;
+    padding-left: 30%;
+}
+
+#al_useremail{
+    width: 40%;
+    padding: 10px 10px 10px 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+#al_userpassword{
+    width: 40%;
+    padding: 10px 10px 10px 10px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+#al_login_message{
+    margin-top: 30px;
+    padding-left: 10px;
+    color: #600;
 }
 
 #al_navbar{
@@ -33,7 +60,19 @@ h2 {
     color: #ddd;
     background: #600;
     padding: 10px 10px 10px 10px;
+    text-decoration: none;
 }
+
+.al_button_2{
+    border: 1px solid #600;
+    border-radius: 10px;
+    color: #ddd;
+    background: #444;
+    padding: 10px 10px 10px 10px;
+    text-decoration: none;    
+}
+
+
 
 #al_open_file{
     float: right;
