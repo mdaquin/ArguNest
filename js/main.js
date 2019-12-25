@@ -1,20 +1,8 @@
-// check logged in
-// if not show dialog
-// multiple topic dropdown
-
-// on open text - show text
-// show right stuff - blocked when no annotation / show editing
-// annotation event (armalian)
-// annotation click
-// auto complete on title
-// add stated by the author - reference to someone else's statement
-// free text about how/what is referenced
-
-
 var api_base = 'http://127.0.0.1:5000/'
 
 var currentSelection = {};
 var userkey;
+var loadedtext;
 
 $( document ).ready(function() {
     fill_select('al_highlights')
@@ -46,6 +34,66 @@ function fill_select(el){
 
 function dbp_frag(u){
     return u.substring(u.lastIndexOf('/')+1)
+}
+
+function load_text(id){
+    if (!is_loggedin()) {showlogin(); return;}
+    loadedtext=id
+    $.ajax({
+	type: "POST",
+	url: api_base+'text',
+	data: JSON.stringify({ key: userkey, id: id }),
+	contentType: "application/json; charset=utf-8",
+	dataType: "json",
+	success: function(data){
+	    if(data.error){
+		alert("Error: "+data.error)
+		loadedtext=undefined
+	    }
+	    else {
+		$('#al_text_panel').html(data.text)
+		$('#al_text_list_dialog').css("display", "none")
+	    }
+	},
+	failure: function(errMsg) {
+	    loadedtext=undefined
+	    alert("Server error: "+errMsg)
+	}
+    });        
+}
+
+function open_text(){
+    if (!is_loggedin()) {showlogin(); return;}
+    $.ajax({
+	type: "POST",
+	url: api_base+'texts',
+	data: JSON.stringify({ key: userkey }),
+	contentType: "application/json; charset=utf-8",
+	dataType: "json",
+	success: function(data){
+	    if(data.error)
+		alert("Error: "+data.error)
+	    else {
+		st = ""
+		for(var i in data.list){
+		    st += '<a href="javascript:load_text(\''+data.list[i].id+'\');" class="text_load_button">'+data.list[i].title+'</a><br/>'
+		}
+		$("#al_text_list_dialog").html(st)
+		$("#al_text_list_dialog").css("display", "block")
+	    }
+	},
+	failure: function(errMsg) {
+	    alert("Server error: "+errMsg)
+	}
+    });        
+}
+
+function is_loggedin(){
+    return userkey != undefined
+}
+
+function showlogin(){
+    logout();
 }
 
 function logout(){

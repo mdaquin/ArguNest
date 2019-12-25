@@ -14,62 +14,13 @@
     <div id="al_navbar">
       <div id="al_title">ArguNest</div>
       <a href="javascript:logout();" id="al_logout" class="al_button">Logout</a>      
-      <div id="al_open_file" class="al_button">Open Text</div>
+      <a href="javascript:open_text()" id="al_open_file" class="al_button">Open Text</a>
     </div>
 
-    <!-- 66% - y scrollbar on the left --> 
     <div id="al_text_panel">
-      <p class="al_reference">1. Norris, John. Practical discourses upon the beatitudes of our Lord and Saviour Jesus Christ (1693). Vol. 3. 15th​ edn. (London, 1728), pp. 9, 37-38, 46-47. In Eighteenth Century Collections Online, Gale.</p>
-      <p class="al_text">
-The sense of it I have already explained, and made to be the same with what the letter of the
-text imports; namely, That our whole affection be placed upon God, and that we love him so
-entirely as to love none but him. I come now to justify this sense, which I shall endeavour to
-establish upon this double basis in general.
-I. THAT God is the only author or cause of our love.
-II. THAT he is also the only proper object of it.
-</p>
-<p class="al_text">
-[…] Well then, we have now at length found out the true cause of all our pleasure, and in that
-the only proper object of our love. And certainly, if ever philosophy were a handmaid to
-divinity, it is now, as furnishing us with a certain ground for the most sublime and noble
-conclusion in the world, the full, perfect and entire love of God, which now appears to be
-founded upon principles, and to be demonstrable in a clear and distinct order of reasoning.
-For if God be the only true cause that acts upon our spirits, and produces our pleasure, then
-he only does us good, he only perfects our being and makes us happy; and if he only does us
-good, then he only is our good; and if he only is our good, then he only is lovely, or the
-proper object of our love; and if he only is lovely, then ’tis plain that we ought to love none
-but him, and him entirely. Or to argue backwards, we are to love nothing but what is lovely;
-nothing is lovely but what is our Good; nothing is our Good, but what does us good; nothing
-does us good but what causes Pleasure in us; nothing causes Pleasure in us but God; therefore
-we are to love nothing but God. I say nothing but God, for he is the only lovely Object, and
-he is infinitely so. Nothing but God, for he only is our Good. Nothing but God, for he only
-does us good and makes us happy. Nothing but God, for he only is the author of all our
-pleasure; and in him we not only live, move and have our being, but have also all the joy and
-comfort of our being. Whatever degree of good we have received, we have received it of him;
-whatever we enjoy, we enjoy it in him; and whatever we expect, we expect it from him, with
-whom is the Well of Life, [Book of Psalms 36. 9.] And in whose light we hope to see light;
-and therefore we are to love none but him, and him with the whole heart, soul, and mind,
-with the full weight of our desire, with all the activity of our love.
-      </p>
-      <p class="al_text">
-[…] If it should now be objected (as ’tis very probable it may) that the enlarging this first
-commandment to such a magnitude, will make it devour and swallow up the second. For if
-the love of God must be thus perfect and entire, so as to be exclusive of all creatures [i.e.
-human beings], what room can then be left for the love of our neighbour? To this the answer
-is very easy and very clear. If our love to God and our neighbour were of the same kind, the
-entire love of the former would indeed wholly exclude that of the latter. But this is not the
-case. We are not here supposed to love God in the same sense, or with the same sort of love
-wherewith we love our neighbour. We do not love God by wishing any good to him (whereof
-he is not capable) but by wishing him as a good to ourselves. On the contrary, we do not, or
-at least should not love our neighbour by wishing him as a good to ourselves, (for he is not
-our good) but by wishing good to him. That is in short, we love God with love of desire, and
-we love our neighbour with love of benevolence or charity. But now the entire desire of God
-is very consistent with all manner of benevolence to our neighbour. It does indeed wholly
-exclude all love of desire towards him. But this is what I contend for, I would have the love
-</p>
+      <img style="width: 33%; margin-left: 33%; margin-top: 100px;" src="imgs/drawing.jpg" />
     </div>
 
-    <!-- 33% - fixed - 100% y size -->
     <div id="al_annotation_panel">
       <h2>Concept to highlight</h2>
       <select id="al_highlights">
@@ -90,10 +41,10 @@ exclude all love of desire towards him. But this is what I contend for, I would 
 	<option value="none">-- concept --</option>
 	<option value="text">Test</option>
       </select>
-      <div id="al_graph_panel">
-	
-	</div>
+      <div id="al_graph_panel"></div>
         </div>
+
+    <div id="al_text_list_dialog"></div>
 
     <div id="al_login_dialog">
 	<input type="text" name="useremail" id="al_useremail" placeholder="email address"><br/>
