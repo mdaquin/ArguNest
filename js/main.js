@@ -29,6 +29,23 @@ $( document ).ready(function() {
 	}
     });
     $("#al_an_title").change(function(){update_annotation()})
+    $("#al_an_type_arg").change(function(){update_annotation()})
+    $("#al_an_type_prop").change(function(){update_annotation()})
+    $("#al_an_ref_stated").change(function(){
+	if (document.getElementById("al_an_ref_other").checked)
+	    $("#al_reference").css("display","block")
+	else
+	    $("#al_reference").css("display","none")
+	update_annotation()
+    })
+    $("#al_an_ref_other").change(function(){
+	if (document.getElementById("al_an_ref_other").checked)
+	    $("#al_reference").css("display","block")
+	else
+	    $("#al_reference").css("display","none")	    
+	update_annotation()
+    })
+    $("#al_reference").change(function(){update_annotation()})
 });
 
 function init_annotation(){
@@ -36,6 +53,10 @@ function init_annotation(){
     // remove additional topics
     $("#al_an_title").val("")
     // clear graph
+    $("#al_delete_button").css("display", "none")
+    $("#al_an_ref_stated").prop("checked", true)
+    $("#al_reference").css("display","none")
+    $("#al_reference").val("")    
 }
 
 // base hasfunction
@@ -50,6 +71,8 @@ function update_annotation(){
     var aid
     var text
     var type
+    var ref
+    $("#al_delete_button").css("display", "inline")
     if (currentSelection) {
 	if (currentSelection.id){
 	    aid = currentSelection.id
@@ -66,11 +89,15 @@ function update_annotation(){
 	$("#al_text_panel").html(text)	
     }
     type = "proposition"
-    if (!annotations[aid]) annotations[aid] = {}
     if (document.getElementById("al_an_type_arg").checked) type = "argument"
+    ref = "stated"
+    if (document.getElementById("al_an_ref_other").checked) ref = "other"    
+    if (!annotations[aid]) annotations[aid] = {}    
     annotations[aid].text = atext
     annotations[aid].type = type
     annotations[aid].title = $("#al_an_title").val()
+    annotations[aid].ref   = ref
+    annotations[aid].refto = $("#al_reference").val()    
     if (type=="argument")
 	$("#ann_"+aid).css("background", "#cfc")
     else
@@ -80,6 +107,7 @@ function update_annotation(){
 }
 
 function selectOnClick(aid){
+    $("#al_delete_button").css("display", "inline")
     currentSelection.id = aid
     if (annotations[aid]){
 	$("#al_an_title").val(annotations[aid].title)
@@ -87,6 +115,15 @@ function selectOnClick(aid){
 	    $("#al_an_type_arg").prop("checked", true)
 	else
 	    $("#al_an_type_prop").prop("checked", true)
+	if (annotations[aid].ref=="stated"){
+	    $("#al_an_ref_stated").prop("checked", true)
+	    $("#al_reference").css("display", "none")
+	}
+	else {
+	    $("#al_an_ref_other").prop("checked", true)
+	    $("#al_reference").css("display", "block")	    
+	}
+	$("#al_reference").val(annotations[aid].refto)
     } else {
 	console.log("annotation selected that does not exist...")
     }

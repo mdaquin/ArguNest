@@ -164,6 +164,15 @@ h2 {
     margin-bottom: 20px;
 }
 
+#al_reference{
+    width: 100%;
+    padding: 5px 5px 5px 5px;
+    border-radius: 10px;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    display: none;
+}
+
 .al_an_topic{
     width: 100%;
     padding: 5px 5px 5px 5px;
@@ -176,4 +185,9 @@ h2 {
     width: 100%;
     border: 1px solid #666;
     margin-top: 20px;
+}
+
+#al_delete_button{
+    float: right;
+    display: none;
 }

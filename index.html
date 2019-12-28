@@ -30,13 +30,15 @@
       <hr />
       <div id="al_type_buttons">
       <input id="al_an_type_arg" class="al_radio" type="radio" name="an_type" value="argument" checked><span class="al_rad_label">Argument</span>
-      <input if="al_an_type_prop" class="al_radio" type="radio" name="an_type" value="proposition"><span class="al_rad_label">Proposition</span>
+      <input id="al_an_type_prop" class="al_radio" type="radio" name="an_type" value="proposition"><span class="al_rad_label">Proposition</span>
+      <a href="javascript:delete_annotations();" id="al_delete_button">delete annotation</a>
       </div>
       <input type="text" name="an_title" id="al_an_title" placeholder="title of the argument or proposition"><br/>
       <div id="al_ref_buttons">
-      <input class="al_radio" type="radio" name="an_ref" value="own" checked><span class="al_rad_label">Stated by the authors</span><br/>
-      <input class="al_radio" type="radio" name="an_ref" value="other"><span class="al_rad_label">Reference to someone else's statement</span>
-      </div>      
+      <input class="al_radio" id="al_an_ref_stated" type="radio" name="an_ref" value="own" checked><span class="al_rad_label">Stated by the authors</span><br/>
+      <input class="al_radio" id="al_an_ref_other" type="radio" name="an_ref" value="other"><span class="al_rad_label">Reference to someone else's statement</span>
+      </div>
+      <input type="text" id="al_reference" placeholder="person or work referenced" /><br/>
       <select id="al_an_topic_1" class="al_an_topic">
 	<option value="none">-- concept --</option>
 	<option value="text">Test</option>
