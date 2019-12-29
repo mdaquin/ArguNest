@@ -81,12 +81,31 @@ function topic_updated(n){
     update_annotation()
 }
 
+
+function show_annotations(){
+    for (var aid in annotations){
+	create_annotation_span(aid, annotations[aid].text)
+	if (annotations[aid].type=="argument")
+	    $("#ann_"+aid).css("background", "#cfc")
+	else
+	    $("#ann_"+aid).css("background", "#ccf")
+	$('#ann_'+aid).attr('onClick', 'selectOnClick("'+aid+'");');
+    }
+}
+
 // base hasfunction
 // from https://gist.github.com/iperelivskiy/4110988
 var funhash = function(s) {
     for(var i = 0, h = 0xdeadbeef; i < s.length; i++)
         h = Math.imul(h ^ s.charCodeAt(i), 2654435761);
     return (h ^ h >>> 16) >>> 0;
+}
+
+
+function create_annotation_span(aid, atext){
+    text = $("#al_text_panel").html()
+    text = text.replace(atext, '<span class="al_ann" id="ann_'+aid+'">'+atext+'</span>')
+    $("#al_text_panel").html(text)	
 }
 
 function update_annotation(){
@@ -107,14 +126,16 @@ function update_annotation(){
     if ($("#ann_"+aid).length && annotations[aid]){
 	atext = annotations[aid].text
     } else {
-	text = $("#al_text_panel").html()
-	text = text.replace(currentSelection.text, '<span class="al_ann" id="ann_'+aid+'">'+currentSelection.text+'</span>')
-	$("#al_text_panel").html(text)	
+	create_annotation_span(aid, atext, type)
     }
     $(".al_ann").css("font-weight", "normal")
     $("#ann_"+aid).css("font-weight", "600")
     type = "proposition"
     if (document.getElementById("al_an_type_arg").checked) type = "argument"
+    if (type=="argument")
+	$("#ann_"+aid).css("background", "#cfc")
+    else
+	$("#ann_"+aid).css("background", "#ccf")
     ref = "stated"
     if (document.getElementById("al_an_ref_other").checked) ref = "other"    
     for(var i = 1; i <= topic_count; i++)
@@ -126,12 +147,59 @@ function update_annotation(){
     annotations[aid].ref    = ref
     annotations[aid].refto  = $("#al_reference").val()
     annotations[aid].topics = topics
-    if (type=="argument")
-	$("#ann_"+aid).css("background", "#cfc")
-    else
-	$("#ann_"+aid).css("background", "#ccf")
+    annotations[aid].user   = userkey
+    annotations[aid].doc    = loadedtext
+    annotations[aid].id     = aid
     $('#ann_'+aid).removeAttr('onclick');
     $('#ann_'+aid).attr('onClick', 'selectOnClick("'+aid+'");');
+    saveAnnotation(annotations[aid])
+}
+
+function delete_annotation(){
+    var aid = currentSelection.id
+    $("#ann_"+aid).replaceWith(function() {return $(this).html(); });
+    annotations[aid] = undefined
+    var obj = {"key": userkey, "aid": aid}
+    init_annotation()
+    $.ajax({
+	type: "POST",
+	url: api_base+'annotation/delete',
+	data: JSON.stringify(obj),
+	contentType: "application/json; charset=utf-8",
+	dataType: "json",
+	success: function(data){
+	    if(data.error){
+		alert("Error: "+data.error)
+	    }
+	    else {
+		console.log(data)
+	    }
+	},
+	failure: function(errMsg) {
+	    alert("Server error: "+errMsg)
+	}
+    });        
+}
+
+function saveAnnotation(ann){
+    $.ajax({
+	type: "POST",
+	url: api_base+'annotation',
+	data: JSON.stringify(ann),
+	contentType: "application/json; charset=utf-8",
+	dataType: "json",
+	success: function(data){
+	    if(data.error){
+		alert("Error: "+data.error)
+	    }
+	    else {
+		console.log(data)
+	    }
+	},
+	failure: function(errMsg) {
+	    alert("Server error: "+errMsg)
+	}
+    });        
 }
 
 function selectOnClick(aid){
@@ -139,6 +207,7 @@ function selectOnClick(aid){
     $("#ann_"+aid).css("font-weight", "600")
     init_annotation()
     $("#al_delete_button").css("display", "inline")
+    if (!currentSelection) currentSelection = {}
     currentSelection.id = aid
     if (annotations[aid]){
 	$("#al_an_title").val(annotations[aid].title)
@@ -181,6 +250,7 @@ function dbp_frag(u){
 
 function load_text(id){
     if (!is_loggedin()) {showlogin(); return;}
+    init_annotation()
     loadedtext=id
     $.ajax({
 	type: "POST",
@@ -193,9 +263,13 @@ function load_text(id){
 		alert("Error: "+data.error)
 		loadedtext=undefined
 	    }
-	    else {
+	    else {		
 		$('#al_text_panel').html(data.text)
 		$('#al_text_list_dialog').css("display", "none")
+		annotations = {}
+		for (var i in data.annotations)
+		    annotations[data.annotations[i].id] = data.annotations[i]
+		show_annotations()
 	    }
 	},
 	failure: function(errMsg) {
