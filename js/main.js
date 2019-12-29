@@ -56,11 +56,12 @@ function init_annotation(){
     topic_count = 1
     fill_select('al_an_topic_1')
     $("#al_an_title").val("")
-    // clear graph
     $("#al_delete_button").css("display", "none")
     $("#al_an_ref_stated").prop("checked", true)
     $("#al_reference").css("display","none")
-    $("#al_reference").val("")    
+    $("#al_reference").val("")
+    $("#al_small_graph").remove()
+
 }
 
 function new_topic_select(){
@@ -193,13 +194,14 @@ function saveAnnotation(ann){
 		alert("Error: "+data.error)
 	    }
 	    else {
+		show_graph(data.id, userkey)
 		console.log(data)
 	    }
 	},
 	failure: function(errMsg) {
 	    alert("Server error: "+errMsg)
 	}
-    });        
+    });
 }
 
 function selectOnClick(aid){
@@ -232,6 +234,7 @@ function selectOnClick(aid){
     } else {
 	console.log("annotation selected that does not exist...")
     }
+    show_graph(aid, userkey)
 }
 
 function fill_select(el){

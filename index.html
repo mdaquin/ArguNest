@@ -6,8 +6,13 @@
     <link rel="stylesheet" href="css/main.css">
     <title>ArguNest</title>
     <script src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="https://mbostock.github.com/d3/d3.js?2.6.0"></script>
+    <script src="http://d3js.org/d3.v2.js"></script>
+    <script type="text/javascript" src="https://mbostock.github.com/d3/d3.layout.js?2.6.0"></script>
+    <script type="text/javascript" src="https://mbostock.github.com/d3/d3.geom.js?2.6.0"></script>
     <script src="js/topics.js"></script>
-    <script src="js/main.js"></script>    
+    <script src="js/main.js"></script>
+    <script src="js/small_graph.js"></script>        
   </head>
   <body>
 
@@ -38,7 +43,7 @@
       <input class="al_radio" id="al_an_ref_stated" type="radio" name="an_ref" value="own" checked><span class="al_rad_label">Stated by the authors</span><br/>
       <input class="al_radio" id="al_an_ref_other" type="radio" name="an_ref" value="other"><span class="al_rad_label">Reference to someone else's statement</span>
       </div>
-      <input type="text" id="al_reference" placeholder="person or work referenced" /><br/>
+      <input type="text" id="al_reference" placeholder="person or work referenced" />
       <div id="al_topic_selects">
       <select id="al_an_topic_1" class="al_an_topic">
 	<option value="none">-- concept --</option>
