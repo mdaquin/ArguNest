@@ -4,6 +4,7 @@ var currentSelection = undefined
 var userkey
 var loadedtext
 var currentannotation
+var topic_count = 1
 
 var annotations = {}
 
@@ -46,17 +47,38 @@ $( document ).ready(function() {
 	update_annotation()
     })
     $("#al_reference").change(function(){update_annotation()})
+    $("#al_an_topic_1").change(function(){topic_updated(1)})
 });
 
 function init_annotation(){
+    for (var i = topic_count; i > 1; i--)
+	$("#al_an_topic_"+i).remove()
+    topic_count = 1
     fill_select('al_an_topic_1')
-    // remove additional topics
     $("#al_an_title").val("")
     // clear graph
     $("#al_delete_button").css("display", "none")
     $("#al_an_ref_stated").prop("checked", true)
     $("#al_reference").css("display","none")
     $("#al_reference").val("")    
+}
+
+function new_topic_select(){
+    var st = '<select id="al_an_topic_'+(topic_count+1)+'" class="al_an_topic">'
+    st += $('#al_an_topic_'+topic_count).html()
+    st += '</select>'
+    $("#al_topic_selects").append(st)
+    topic_count++
+    var n = topic_count
+    $("#al_an_topic_"+topic_count).change(function(){topic_updated(n)})
+}
+
+
+function topic_updated(n){
+    if (!$("#al_an_topic_"+(n+1)).length){
+	new_topic_select()
+    }
+    update_annotation()
 }
 
 // base hasfunction
@@ -72,6 +94,7 @@ function update_annotation(){
     var text
     var type
     var ref
+    var topics = []
     $("#al_delete_button").css("display", "inline")
     if (currentSelection) {
 	if (currentSelection.id){
@@ -85,19 +108,24 @@ function update_annotation(){
 	atext = annotations[aid].text
     } else {
 	text = $("#al_text_panel").html()
-	text = text.replace(currentSelection.text, '<span id="ann_'+aid+'">'+currentSelection.text+'</span>')
+	text = text.replace(currentSelection.text, '<span class="al_ann" id="ann_'+aid+'">'+currentSelection.text+'</span>')
 	$("#al_text_panel").html(text)	
     }
+    $(".al_ann").css("font-weight", "normal")
+    $("#ann_"+aid).css("font-weight", "600")
     type = "proposition"
     if (document.getElementById("al_an_type_arg").checked) type = "argument"
     ref = "stated"
     if (document.getElementById("al_an_ref_other").checked) ref = "other"    
+    for(var i = 1; i <= topic_count; i++)
+	topics.push($("#al_an_topic_"+i).val())
     if (!annotations[aid]) annotations[aid] = {}    
-    annotations[aid].text = atext
-    annotations[aid].type = type
-    annotations[aid].title = $("#al_an_title").val()
-    annotations[aid].ref   = ref
-    annotations[aid].refto = $("#al_reference").val()    
+    annotations[aid].text  = atext
+    annotations[aid].type  = type
+    annotations[aid].title  = $("#al_an_title").val()
+    annotations[aid].ref    = ref
+    annotations[aid].refto  = $("#al_reference").val()
+    annotations[aid].topics = topics
     if (type=="argument")
 	$("#ann_"+aid).css("background", "#cfc")
     else
@@ -107,6 +135,9 @@ function update_annotation(){
 }
 
 function selectOnClick(aid){
+    $(".al_ann").css("font-weight", "normal")
+    $("#ann_"+aid).css("font-weight", "600")
+    init_annotation()
     $("#al_delete_button").css("display", "inline")
     currentSelection.id = aid
     if (annotations[aid]){
@@ -124,6 +155,11 @@ function selectOnClick(aid){
 	    $("#al_reference").css("display", "block")	    
 	}
 	$("#al_reference").val(annotations[aid].refto)
+	$("#al_an_topic_1").val(annotations[aid].topics[0])
+	for(var i = 2; i <= annotations[aid].topics.length; i++){
+	    new_topic_select()
+	    $("#al_an_topic_"+i).val(annotations[aid].topics[i-1])	    
+	}
     } else {
 	console.log("annotation selected that does not exist...")
     }
