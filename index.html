@@ -8,11 +8,12 @@
     <script src="js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="https://mbostock.github.com/d3/d3.js?2.6.0"></script>
     <script src="http://d3js.org/d3.v2.js"></script>
-    <script type="text/javascript" src="https://mbostock.github.com/d3/d3.layout.js?2.6.0"></script>
-    <script type="text/javascript" src="https://mbostock.github.com/d3/d3.geom.js?2.6.0"></script>
+<!--    <script type="text/javascript" src="https://mbostock.github.com/d3/d3.layout.js?2.6.0"></script> -->
+<!--    <script type="text/javascript" src="https://mbostock.github.com/d3/d3.geom.js?2.6.0"></script> -->
     <script src="js/topics.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/small_graph.js"></script>        
+    <script src="js/small_graph.js"></script>
+    <script src="js/large_graph.js"></script>    
   </head>
   <body>
 
@@ -25,6 +26,8 @@
     <div id="al_text_panel">
       <img style="width: 33%; margin-left: 33%; margin-top: 100px;" src="imgs/drawing.jpg" />
     </div>
+
+    <div id="al_l_graph_panel"> </div>
 
     <div id="al_annotation_panel">
       <h2>Concept to highlight</h2>
@@ -51,7 +54,9 @@
       </select>
       </div>
       <div id="al_graph_panel"></div>
-        </div>
+    </div>
+
+    <a href="javascript:switchView();" class="al_button_2" id="al_switch_view">Switch to graph view</a>
 
     <div id="al_text_list_dialog"></div>
 
@@ -62,6 +67,24 @@
 	<p id="al_login_message"></p>
     </div>
 
+    <div id="al_relation_panel">
+      <h2>Create relation between nodes</h2>
+      <select id="al_rel_origin">
+	<option val="none"> -- origin -- </option>
+      </select>
+      <select id="al_relation">
+	<option val="same">same</option>
+	<option val="supports">supports</option>
+	<option val="contradicts">contradicts</option>
+      </select>
+      <select id="al_rel_target">
+	<option val="none"> -- target -- </option>
+      </select>
+      <a id="al_rel_ok" class="al_button" href="javascript:saveRelation();">OK</a>
+      <div id="al_existing_rel">
+      </div>      
+    </div>
+    
 
   </body>
 </html>

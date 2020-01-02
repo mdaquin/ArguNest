@@ -12,6 +12,13 @@ h2 {
     font-size: 100%;
 }
 
+h3 {
+    margin-bottom: 5px;
+    margin-top: 10px;
+    padding-top: 0px;
+    font-size: 100%;
+}
+
 #al_login_dialog{
     position: fixed;
     top: 0;
@@ -112,9 +119,17 @@ h2 {
 
 #al_text_panel{
     background: #fff;
-    height: 100vh;
+    height: calc(100vh - 50px);
     width: 60%;
     padding: 20px 20px 20px 20px;
+}
+
+#al_l_graph_panel{
+    background: #fff;
+    height: calc(100vh - 50px);
+    width: 60%;
+    padding: 20px 20px 20px 20px;
+    display: none;
 }
 
 #al_text_panel p{
@@ -140,6 +155,23 @@ h2 {
     width: 33%;
     height: 200px;
     padding: 10px 20px 20px 20px;
+}
+
+#al_relation_panel{
+    position: fixed;
+    top: 50px;
+    right: 0px;
+    background: #fff;
+    width: 33%;
+    height: 200px;
+    padding: 10px 20px 20px 20px;
+    display: none;
+}
+
+#al_switch_view{
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
 }
 
 #al_highlights{
@@ -192,4 +224,34 @@ h2 {
 #al_delete_button{
     float: right;
     display: none;
+}
+
+#al_rel_origin{
+    width: 100%;
+    padding: 5px 5px 5px 5px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+#al_rel_target{
+    width: 100%;
+    padding: 5px 5px 5px 5px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+#al_relation{
+    width: 100%;
+    padding: 5px 5px 5px 5px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    background: #fff;
+}
+
+#al_rel_ok{
+    float: right;
+}
+
+#al_existing_rel{
+    margin-top: 50px;
 }

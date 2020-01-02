@@ -5,8 +5,9 @@ var userkey
 var loadedtext
 var currentannotation
 var topic_count = 1
-
+var currentview = "annotation"
 var annotations = {}
+var relations = {}
 
 $( document ).ready(function() {
     fill_select('al_highlights')
@@ -48,6 +49,7 @@ $( document ).ready(function() {
     })
     $("#al_reference").change(function(){update_annotation()})
     $("#al_an_topic_1").change(function(){topic_updated(1)})
+    $("#al_rel_origin").change(function(){showRelsInPanel()})
 });
 
 function init_annotation(){
@@ -294,7 +296,7 @@ function open_text(){
 	    if(data.error)
 		alert("Error: "+data.error)
 	    else {
-		st = ""
+		var st = ""
 		for(var i in data.list){
 		    st += '<a href="javascript:load_text(\''+data.list[i].id+'\');" class="text_load_button">'+data.list[i].title+'</a><br/>'
 		}
@@ -386,4 +388,112 @@ function register(){
 	    $('#al_login_message').html("Server error: "+errMsg)
 	}
     });    
+}
+
+function fillRelSelect(){
+    var st = ""
+    for (var ann in annotations){
+	st+= '<option value="'+ann+'">'+annotations[ann].type+":"+annotations[ann].title+'</option>'
+    }
+    $("#al_rel_origin").html(st)
+    $("#al_rel_target").html(st)    
+}
+
+function saveRelation(){
+    var origin = $("#al_rel_origin").val()
+    var rel    = $("#al_relation").val()
+    var target = $("#al_rel_target").val()
+    if (!relations[origin]) relations[origin] = {}
+    if (!relations[origin][rel]) relations[origin][rel] = []
+    relations[origin][rel].push(target)
+    showRelInGraph(origin, rel, target)
+    showRelsInPanel();
+    saveRel(origin, rel, target)
+}
+
+function saveRel(origin, rel, target){
+    var obj = {key: userkey,
+	       origin: origin,
+	       relation: rel,
+	       target: target,
+	       doc: loadedtext
+	      }
+    $.ajax({
+	type: "POST",
+	url: api_base+'relation',
+	data: JSON.stringify(obj),
+	contentType: "application/json; charset=utf-8",
+	dataType: "json",
+	success: function(data){
+	    if(data.error){
+		alert("Error: "+data.error)
+	    }
+	    else {
+		console.log(data)
+	    }
+	},
+	failure: function(errMsg) {
+	    alert("Server error: "+errMsg)
+	}
+    });
+}
+
+
+function showRelsInPanel(){
+    var origin = $("#al_rel_origin").val()
+    if (relations[origin]){
+	var st = ""
+	if (relations[origin]["same"]){
+	    st += '<h3>Existing "same" relation</h3>'
+	    for (var i in relations[origin]["same"]){
+		st+= '<div class="al_ex_rel">'
+		var target = relations[origin]["same"][i]
+		st += annotations[target].type+": "+annotations[target].title
+		st += ' <a href="javascript:deleteRelation(\''+origin+'\',\'same\',\''+target+'\');">(delete)</a>'
+		st+= '</div>'
+	    }	    
+	}
+	if (relations[origin]["supports"]){
+	    st += '<h3>Existing "supports" relation</h3>'
+	    for (var i in relations[origin]["supports"]){
+		st+= '<div class="al_ex_rel">'
+		var target = relations[origin]["supports"][i]
+		st += annotations[target].type+": "+annotations[target].title
+		st += ' <a href="javascript:deleteRelation(\''+origin+'\',\'supports\',\''+target+'\');">(delete)</a>'
+		st+= '</div>'
+	    }	    
+	}
+	if (relations[origin]["contradicts"]){
+	    st += '<h3>Existing "contradicts" relation</h3>'
+	    for (var i in relations[origin]["contradicts"]){
+		st+= '<div class="al_ex_rel">'
+		var target = relations[origin]["contradicts"][i]
+		st += annotations[target].type+": "+annotations[target].title
+		st += ' <a href="javascript:deleteRelation(\''+origin+'\',\'contradicts\',\''+target+'\');">(delete)</a>'
+		st+= '</div>'
+	    }	    
+	}	
+	$("#al_existing_rel").html(st)
+    }
+}
+
+function switchView(){
+    if (currentview=="annotation"){
+	$("#al_text_panel").css("display", "none")
+	$("#al_annotation_panel").css("display", "none")
+	$("#al_l_graph_panel").css("display", "block")
+	$("#al_relation_panel").css("display", "block")
+	$("#al_switch_view").html("Switch to annotation view")
+	show_large_graph(userkey, loadedtext)
+	fillRelSelect();
+	currentview="graph"
+	showRelsInPanel();
+    } else {
+	$("#al_text_panel").css("display", "block")
+	$("#al_annotation_panel").css("display", "block")
+	$("#al_l_graph_panel").css("display", "none")
+	$("#al_relation_panel").css("display", "none")
+	currentview="annotation"
+	$("#al_switch_view").html("Switch to graph view")	
+    }
 }
