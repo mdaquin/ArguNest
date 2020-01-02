@@ -184,6 +184,41 @@ function delete_annotation(){
     });        
 }
 
+function deleteRelation(o,r,t){
+    var obj = {key: userkey, doc: loadedtext,
+	       origin:o, relation:r, target:t}
+    init_annotation()
+    $.ajax({
+	type: "POST",
+	url: api_base+'relation/delete',
+	data: JSON.stringify(obj),
+	contentType: "application/json; charset=utf-8",
+	dataType: "json",
+	success: function(data){
+	    if(data.error){
+		alert("Error: "+data.error)
+	    }
+	    else {
+		console.log(data)
+		relations[o][r] = relations[o][r].filter(function(value, index, arr){return value != t;});
+		for(var n in tnodes){
+		    if (tnodes[n].id == o){
+			node = tnodes[n]
+			node[r] = node[r].filter(function(value, index, arr){return value != t;});			
+		    }
+		}
+		visGraph();
+		showRelsInPanel();		
+	    }
+	},
+	failure: function(errMsg) {
+	    alert("Server error: "+errMsg)
+	}
+    });        
+}
+
+
+
 function saveAnnotation(ann){
     $.ajax({
 	type: "POST",
@@ -274,6 +309,7 @@ function load_text(id){
 		annotations = {}
 		for (var i in data.annotations)
 		    annotations[data.annotations[i].id] = data.annotations[i]
+		relations = data.relations
 		show_annotations()
 	    }
 	},
@@ -285,6 +321,7 @@ function load_text(id){
 }
 
 function open_text(){
+    if (currentview=="graph") switchView();
     if (!is_loggedin()) {showlogin(); return;}
     $.ajax({
 	type: "POST",
@@ -441,20 +478,23 @@ function saveRel(origin, rel, target){
 
 function showRelsInPanel(){
     var origin = $("#al_rel_origin").val()
+    console.log("origin: "+origin)
+    console.log(relations[origin])    
+    var st = "<h2>"+annotations[origin].type+": "+annotations[origin].title+"</h2>"
     if (relations[origin]){
-	var st = ""
 	if (relations[origin]["same"]){
-	    st += '<h3>Existing "same" relation</h3>'
+	    st += '<h3>existing "same" relation</h3>'
 	    for (var i in relations[origin]["same"]){
 		st+= '<div class="al_ex_rel">'
 		var target = relations[origin]["same"][i]
+		console.log("target: "+target)		
 		st += annotations[target].type+": "+annotations[target].title
 		st += ' <a href="javascript:deleteRelation(\''+origin+'\',\'same\',\''+target+'\');">(delete)</a>'
 		st+= '</div>'
 	    }	    
 	}
 	if (relations[origin]["supports"]){
-	    st += '<h3>Existing "supports" relation</h3>'
+	    st += '<h3>existing "supports" relation</h3>'
 	    for (var i in relations[origin]["supports"]){
 		st+= '<div class="al_ex_rel">'
 		var target = relations[origin]["supports"][i]
@@ -464,7 +504,7 @@ function showRelsInPanel(){
 	    }	    
 	}
 	if (relations[origin]["contradicts"]){
-	    st += '<h3>Existing "contradicts" relation</h3>'
+	    st += '<h3>existing "contradicts" relation</h3>'
 	    for (var i in relations[origin]["contradicts"]){
 		st+= '<div class="al_ex_rel">'
 		var target = relations[origin]["contradicts"][i]
@@ -473,8 +513,8 @@ function showRelsInPanel(){
 		st+= '</div>'
 	    }	    
 	}	
-	$("#al_existing_rel").html(st)
     }
+    $("#al_existing_rel").html(st)
 }
 
 function switchView(){

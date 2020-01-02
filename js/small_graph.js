@@ -34,20 +34,76 @@ function show_graph(aid, key){
 		}
 		for(var i = 0; i < nodes.length; i++) {
 		    for(var j = 0; j < i; j++) {
+			if (!nodes[i].supports) nodes[i].supports = []
+			if (!nodes[i].contradicts) nodes[i].contradicts = []
+			if (!nodes[i].same) nodes[i].same = []
+			if (!nodes[j].supports) nodes[j].supports = []
+			if (!nodes[j].contradicts) nodes[j].contradicts = []
+			if (!nodes[j].same) nodes[j].same = []			
 			if (nodes[i].linkto.includes(nodes[j].id)){
 			    links.push({
 				source : i,
 				target : j,
-				weight : 1
+				weight : 1,
+				type: "topic"
 			    });
 			}
 			if (nodes[j].linkto.includes(nodes[i].id)){
 			    links.push({
 				source : j,
 				target : i,
-				weight : 1
+				weight : 1,
+				type: "topic"
 			    });
 			}
+			if (nodes[i].supports.includes(nodes[j].id)){
+			    links.push({
+				source : i,
+				target : j,
+				weight : 1,
+				type   : "supports"
+			    });
+			}
+			if (nodes[j].supports.includes(nodes[i].id)){
+			    links.push({
+				source : j,
+				target : i,
+				weight : 1,
+				type   : "supports"				
+			    });
+			}
+			if (nodes[i].contradicts.includes(nodes[j].id)){
+			    links.push({
+				source : i,
+				target : j,
+				weight : 1,
+				type   : "contradicts"
+			    });
+			}
+			if (nodes[j].contradicts.includes(nodes[i].id)){
+			    links.push({
+				source : j,
+				target : i,
+				weight : 1,
+				type   : "contradicts"				
+			    });
+			}
+			if (nodes[i].same.includes(nodes[j].id)){
+			    links.push({
+				source : i,
+				target : j,
+				weight : 1,
+				type   : "same"
+			    });
+			}
+			if (nodes[j].same.includes(nodes[i].id)){
+			    links.push({
+				source : j,
+				target : i,
+				weight : 1,
+				type   : "same"				
+			    });
+			}			
 		    }
 		    labelAnchorLinks.push({
 			source : i * 2,
@@ -55,13 +111,23 @@ function show_graph(aid, key){
 			weight : 1
 		    });
 		};
-		var force = d3.layout.force().size([w, h]).nodes(nodes).links(links).gravity(1).linkDistance(20).charge(-2000).linkStrength(function(x) {
+		var force = d3.layout.force().size([w, h]).nodes(nodes).links(links).gravity(1).linkDistance(40).charge(-2000).linkStrength(function(x) {
 		    return x.weight * 10
 		});
 		force.start();
 		var force2 = d3.layout.force().nodes(labelAnchors).links(labelAnchorLinks).gravity(0).linkDistance(0).linkStrength(8).charge(-200).size([w, h]);
 		force2.start();
-		var link = vis.selectAll("line.link").data(links).enter().append("svg:line").attr("class", "link").style("stroke", "#CCC");
+		var link = vis.selectAll("line.link").data(links).enter().append("svg:line").attr("class", "link").style("stroke",  function (l){
+		    if (l.type=="same") return "#000"
+		    if (l.type=="supports") return "#5a5"
+		    if (l.type=="contradicts") return "#a55"	    
+		    return "#CCC"
+		}).style("stroke-width", function (l){
+		    if (l.type=="same") return "2"
+		    if (l.type=="supports") return "2"
+		    if (l.type=="contradicts") return "2"	    
+		    return "1"
+		});
 		var node = vis.selectAll("g.node").data(force.nodes()).enter().append("svg:g").attr("class", "node");
 		node.append("svg:circle").attr("r", 10).style("fill",
 							      function(d){

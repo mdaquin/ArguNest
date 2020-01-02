@@ -135,7 +135,7 @@ function visGraph(){
 			weight : 1
 		    });
 		};
-		var force = d3.layout.force().size([w, h]).nodes(nodes).links(links).gravity(1).linkDistance(20).charge(-8000).linkStrength(function(x) {
+		var force = d3.layout.force().size([w, h]).nodes(nodes).links(links).gravity(1).linkDistance(40).charge(-8000).linkStrength(function(x) {
 		    return x.weight * 10
 		});
 		force.start();
