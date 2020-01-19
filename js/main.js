@@ -8,6 +8,7 @@ var topic_count = 1
 var currentview = "annotation"
 var annotations = {}
 var relations = {}
+var topics = []
 
 $( document ).ready(function() {
     fill_select('al_highlights')
@@ -277,8 +278,7 @@ function selectOnClick(aid){
 function fill_select(el){
     var st1 = '<option value="none">-- concept --</option>'
     for(var i in topics){
-	var reduced = dbp_frag(topics[i])
-	var opt_string = '<option value="'+reduced+'">'+reduced.replace(/_/g,' ')+'</option>'
+	var opt_string = '<option value="'+topics[i].label+'">'+topics[i].label+'</option>'
 	st1+=opt_string
     }
     document.getElementById(el).innerHTML=st1
@@ -304,6 +304,9 @@ function load_text(id){
 		loadedtext=undefined
 	    }
 	    else {		
+		topics = data.taxonomy
+		fill_select('al_highlights')
+		fill_select('al_an_topic_1')
 		$('#al_text_panel').html(data.text)
 		$('#al_text_list_dialog').css("display", "none")
 		annotations = {}
