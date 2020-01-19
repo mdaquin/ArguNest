@@ -136,6 +136,11 @@ h3 {
     margin-top: 10px;
 }
 
+#al_text_panel i{
+    margin-top: 10px;
+    display: block;
+}
+
 .al_reference{
     padding: 20px 20px 10px 20px;
     font-style: italic;

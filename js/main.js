@@ -1,4 +1,4 @@
-var api_base = 'http://127.0.0.1:5000/'
+var api_base = 'http://afel.insight-centre.org/ArguNest/api/'
 
 var currentSelection = undefined
 var userkey
