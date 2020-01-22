@@ -110,8 +110,8 @@ function highlightword(w,s){
 				 '<span class="al_word_'+w+'">'+w+'</span>')
 	$(this).html(ntext)
     });
-    var colour = 'rgba(255,00,00, '+s+')'
-    $("#al_words_classes").append('\n.al_word_'+w+'{text-decoration: underline; text-decoration-color: '+colour+'; border:0px; padding:0px; text-decoration-thickness: 2px;}')
+    var colour = 'rgba(255,150,150, '+s+')'
+    $("#al_words_classes").append('\n.al_word_'+w+'{border:0px; padding:0px; background: '+colour+'}')
 }
 
 function init_annotation(){
