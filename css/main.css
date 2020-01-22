@@ -118,10 +118,22 @@ h3 {
 }
 
 #al_text_panel{
-    background: #fff;
+    background: #ffffff00;
     height: calc(100vh - 50px);
     width: 60%;
     padding: 20px 20px 20px 20px;
+}
+
+#al_highlight_panel{
+    background: #ffffff00;
+    height: calc(100vh - 50px);
+    width: 60%;
+    padding: 20px 20px 20px 20px;
+    position: absolute;
+    top: 50px;
+    left: 0px;
+    z-index: -100;
+    color: #ffffff00;
 }
 
 #al_l_graph_panel{
@@ -137,6 +149,15 @@ h3 {
 }
 
 #al_text_panel i{
+    margin-top: 10px;
+    display: block;
+}
+
+#al_highlight_panel p{
+    margin-top: 10px;
+}
+
+#al_highlight_panel i{
     margin-top: 10px;
     display: block;
 }
@@ -158,8 +179,9 @@ h3 {
     right: 0px;
     background: #fff;
     width: 33%;
-    height: 200px;
+    height: calc(100vh - 100px);
     padding: 10px 20px 20px 20px;
+    overflow-y: auto;
 }
 
 #al_relation_panel{
@@ -259,4 +281,11 @@ h3 {
 
 #al_existing_rel{
     margin-top: 50px;
+}
+
+#al_help_mss{
+    margin-top: 30px;
+    margin-left: 10px;
+    margin-rigt: 10px;
+    font-style: italic;
 }

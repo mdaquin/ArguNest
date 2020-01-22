@@ -3,7 +3,7 @@
 function show_graph(aid, key){
     var obj = {"id": aid, "key": key};
     var aaid = aid;
-    $("#al_small_graph").remove();
+    $("#al_graph_panel").html('')
     $.ajax({
 	type: "POST",
 	url: api_base+'ann_graph',

@@ -3,6 +3,7 @@ var api_base = 'http://afel.insight-centre.org/ArguNest/api/'
 var currentSelection = undefined
 var userkey
 var loadedtext
+var loadedtexttext
 var currentannotation
 var topic_count = 1
 var currentview = "annotation"
@@ -31,6 +32,7 @@ $( document ).ready(function() {
 	    //currentSelection = undefined
 	}
     });
+    $("#al_highlights").change(function(){highlight()})
     $("#al_an_title").change(function(){update_annotation()})
     $("#al_an_type_arg").change(function(){update_annotation()})
     $("#al_an_type_prop").change(function(){update_annotation()})
@@ -53,6 +55,65 @@ $( document ).ready(function() {
     $("#al_rel_origin").change(function(){showRelsInPanel()})
 });
 
+function highlight(){
+    var cid = $("#al_highlights").val()    
+    for (var i in topics){
+	if (topics[i].label == cid){
+	    cid = topics[i].wdid
+	}
+    }
+    var text = $("#al_text_panel").text()
+    var obj = {'id': cid, 'text': text}
+    $.ajax({
+	type: "POST",
+	url: 'http://afel.insight-centre.org/ArguNest/pmiapi/pmi',
+	data: JSON.stringify(obj),
+	contentType: "application/json; charset=utf-8",
+	dataType: "json",
+	success: function(data){
+	    if(data.error){
+		alert("Error: "+data.error)
+	    }
+	    else {
+		// rank terms
+		var items = Object.keys(data).map(function(key) {
+		    return [key, data[key]];
+		});
+		items.sort(function(first, second) {
+		    return second[1] - first[1];
+		});
+		// highlight a third of the words in text
+		// with decreasing intensity
+		var dec = 1 / (items.length / 3)
+		var score = 1
+		$("#al_words_classes").html("")
+		$("#al_highlight_panel").html(loadedtexttext)
+		for(var i in items){
+		    console.log(items[i][0]+" "+score)
+		    highlightword(items[i][0], score)
+		    score = score - dec
+		    if (score <= 0.0) break
+		}
+		// show definition
+	    }
+	},
+	failure: function(errMsg) {
+	    alert("Server error: "+errMsg)
+	}
+    });        
+}
+
+function highlightword(w,s){
+    $("#al_highlight_panel").children().each(function(){
+	var text = $(this).html()	
+	var ntext = text.replace(new RegExp('\\b'+w+'\\b', "g"),
+				 '<span class="al_word_'+w+'">'+w+'</span>')
+	$(this).html(ntext)
+    });
+    var colour = 'rgba(255,00,00, '+s+')'
+    $("#al_words_classes").append('\n.al_word_'+w+'{text-decoration: underline; text-decoration-color: '+colour+'; border:0px; padding:0px; text-decoration-thickness: 2px;}')
+}
+
 function init_annotation(){
     for (var i = topic_count; i > 1; i--)
 	$("#al_an_topic_"+i).remove()
@@ -63,8 +124,7 @@ function init_annotation(){
     $("#al_an_ref_stated").prop("checked", true)
     $("#al_reference").css("display","none")
     $("#al_reference").val("")
-    $("#al_small_graph").remove()
-
+    $("#al_graph_panel").html('')
 }
 
 function new_topic_select(){
@@ -305,9 +365,12 @@ function load_text(id){
 	    }
 	    else {		
 		topics = data.taxonomy
+		$("#al_graph_panel").html('<div id="al_help_mss">Select text and edit above to create annotation. Click on an annotation in the text to see it here.</div>')
 		fill_select('al_highlights')
 		fill_select('al_an_topic_1')
+		loadedtexttext = data.text
 		$('#al_text_panel').html(data.text)
+		$('#al_highlight_panel').html(data.text)		
 		$('#al_text_list_dialog').css("display", "none")
 		annotations = {}
 		for (var i in data.annotations)
