@@ -21,7 +21,8 @@
 
     <div id="al_navbar">
       <div id="al_title">ArguNest</div>
-      <a href="javascript:logout();" id="al_logout" class="al_button">Logout</a>      
+      <a href="javascript:logout();" id="al_logout" class="al_button">Logout</a>
+      <a href="javascript:switchView();" class="al_button" id="al_switch_view">Switch to graph view</a>
       <a href="javascript:open_text()" id="al_open_file" class="al_button">Open Text</a>
     </div>
 
@@ -38,7 +39,7 @@
     <div id="al_l_graph_panel"> </div>
     
     <div id="al_annotation_panel">
-      <h2>Concept to highlight</h2>
+      <h2>Select a concept to be highlighted in the text</h2>
       <select id="al_highlights">
 	<option value="none">-- concept --</option>
 	<option value="text">Test</option>
@@ -46,30 +47,34 @@
       <div id="al_definition_panel">
 	<h3>Definition of concept</h3>
 	<div id="al_definition_text">
-	  <i>select a concept above to see its definition and highlights related terms from the text</i>
+	  <i>select a concept above to see its definition and highlights related terms from the text(s)</i>
 	</div>
 	<a href="javascript:toogleFullDefinition();" id="al_full_definition_but">more...</a>
       </div>
       <hr />
       <div id="al_type_buttons">
+	<h3>Select parts of the text to annotate:</h3>
       <input id="al_an_type_prop" class="al_radio" type="radio" name="an_type" value="proposition" checked><span class="al_rad_label">Proposition</span>
 	<input id="al_an_type_arg" class="al_radio" type="radio" name="an_type" value="argument"><span class="al_rad_label">Argument</span>
       <a href="javascript:delete_annotation();" id="al_delete_button">delete annotation</a>
       </div>
-      <input type="text" name="an_title" id="al_an_title" placeholder="title of the argument or proposition"><br/>
+      <input type="text" name="an_title" id="al_an_title" placeholder="add a summarised description/title of the proposition or argument"><br/>
       <div id="al_ref_buttons">
-      <input class="al_radio" id="al_an_ref_stated" type="radio" name="an_ref" value="own" checked><span class="al_rad_label">Stated by the authors</span><br/>
+	<h3>This proposition or argument is:</h3>
+	<input class="al_radio" id="al_an_ref_stated" type="radio" name="an_ref" value="own" checked><span class="al_rad_label">Stated by the authors</span><br/>
       <input class="al_radio" id="al_an_ref_other" type="radio" name="an_ref" value="other"><span class="al_rad_label">Reference to someone else's statement</span>
       </div>
       <input type="text" id="al_reference" placeholder="person or work referenced" />
       <div id="al_topic_selects">
-      <select id="al_an_topic_1" class="al_an_topic">
+	<h3>The subject(s) of this proposition or argument is/are:</h3>
+	<select id="al_an_topic_1" class="al_an_topic">
 	<option value="none">-- concept --</option>
 	<option value="text">Test</option>
       </select>
       </div>
-      <div id="al_graph_panel"></div>
-    <div style="margin-top: 10px; padding-right: 10px;" id="al_legend_panel">
+      <h3>Visualisation</h3>
+      <div id="al_graph_panel"></div>      
+      <div style="margin-top: 10px; padding-right: 10px;" id="al_legend_panel">
       <p>
       <span><span style="border-radius: 10px; background: #800; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;</span> selected annotation</span> 
       <span><span style="border-radius: 10px; background: #74be74; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;</span> argument</span> 
@@ -84,24 +89,22 @@
     </div>
     </div>
 
-    <a href="javascript:switchView();" class="al_button_2" id="al_switch_view">Switch to graph view</a>
-
     <div id="al_text_list_dialog"></div>
 
     <div id="al_login_dialog">
-	<input type="text" name="useremail" id="al_useremail" placeholder="email address"><br/>
+	<input type="text" name="useremail" id="al_useremail" placeholder="username"><br/>
 	<input type="password" name="userpassword" id="al_userpassword" placeholder="password"><br/>
 	<a class="al_button" href="javascript:login();">login</a>  <a class="al_button_2" href="javascript:register();">register</a>
 	<p id="al_login_message"></p>
     </div>
 
     <div id="al_relation_panel">
-      <h2>Create relation between nodes</h2>
+      <h2>Create relation between proposition(s) and/or argument(s)</h2>
       <select id="al_rel_origin">
 	<option val="none"> -- origin -- </option>
       </select>
       <select id="al_relation">
-	<option val="same">same</option>
+<!--	<option val="same">same</option> -->
 	<option val="supports">supports</option>
 	<option val="contradicts">contradicts</option>
       </select>

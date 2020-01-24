@@ -117,6 +117,7 @@ function highlight(){
     }
     var text = $("#al_text_panel").text()
     var obj = {'id': cid, 'text': text}
+    $("#al_highlight_panel").html(loadedtexttext)
     $.ajax({
 	type: "POST",
 	url: 'http://afel.insight-centre.org/ArguNest/pmiapi/pmi',
@@ -140,7 +141,6 @@ function highlight(){
 		var dec = 1 / (items.length / 3)
 		var score = 1
 		$("#al_words_classes").html("")
-		$("#al_highlight_panel").html(loadedtexttext)
 		for(var i in items){
 		    console.log(items[i][0]+" "+score)
 		    highlightword(items[i][0], score)
@@ -640,6 +640,7 @@ function showRelsInPanel(){
 function switchView(){
     if (currentview=="annotation"){
 	$("#al_text_panel").css("display", "none")
+	$("#al_highlight_panel").css("display", "none")	
 	$("#al_annotation_panel").css("display", "none")
 	$("#al_l_graph_panel").css("display", "block")
 	$("#al_relation_panel").css("display", "block")
@@ -650,6 +651,7 @@ function switchView(){
 	showRelsInPanel();
     } else {
 	$("#al_text_panel").css("display", "block")
+	$("#al_highlight_panel").css("display", "block")	
 	$("#al_annotation_panel").css("display", "block")
 	$("#al_l_graph_panel").css("display", "none")
 	$("#al_relation_panel").css("display", "none")
