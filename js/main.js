@@ -549,7 +549,8 @@ function register(){
 function fillRelSelect(){
     var st = ""
     for (var ann in annotations){
-	st+= '<option value="'+ann+'">'+annotations[ann].type+":"+annotations[ann].title+'</option>'
+	if (annotations[ann] && annotations[ann].type)
+	    st+= '<option value="'+ann+'">'+annotations[ann].type+":"+annotations[ann].title+'</option>'
     }
     $("#al_rel_origin").html(st)
     $("#al_rel_target").html(st)    
