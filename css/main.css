@@ -289,3 +289,15 @@ h3 {
     margin-rigt: 10px;
     font-style: italic;
 }
+
+#al_definition_panel{
+    margin-bottom: 10px;
+}
+
+#al_full_definition_but{
+    display: none;
+}
+
+#al_definition_text{
+    font-size: 80%;
+}

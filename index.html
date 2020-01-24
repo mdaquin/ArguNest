@@ -43,10 +43,17 @@
 	<option value="none">-- concept --</option>
 	<option value="text">Test</option>
       </select>
+      <div id="al_definition_panel">
+	<h3>Definition of concept</h3>
+	<div id="al_definition_text">
+	  <i>select a concept above to see its definition and highlights related terms from the text</i>
+	</div>
+	<a href="javascript:toogleFullDefinition();" id="al_full_definition_but">more...</a>
+      </div>
       <hr />
       <div id="al_type_buttons">
-      <input id="al_an_type_arg" class="al_radio" type="radio" name="an_type" value="argument" checked><span class="al_rad_label">Argument</span>
-      <input id="al_an_type_prop" class="al_radio" type="radio" name="an_type" value="proposition"><span class="al_rad_label">Proposition</span>
+      <input id="al_an_type_prop" class="al_radio" type="radio" name="an_type" value="proposition" checked><span class="al_rad_label">Proposition</span>
+	<input id="al_an_type_arg" class="al_radio" type="radio" name="an_type" value="argument"><span class="al_rad_label">Argument</span>
       <a href="javascript:delete_annotation();" id="al_delete_button">delete annotation</a>
       </div>
       <input type="text" name="an_title" id="al_an_title" placeholder="title of the argument or proposition"><br/>

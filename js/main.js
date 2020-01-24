@@ -32,7 +32,7 @@ $( document ).ready(function() {
 	    //currentSelection = undefined
 	}
     });
-    $("#al_highlights").change(function(){highlight()})
+    $("#al_highlights").change(function(){highlight();showdef();})
     $("#al_an_title").change(function(){update_annotation()})
     $("#al_an_type_arg").change(function(){update_annotation()})
     $("#al_an_type_prop").change(function(){update_annotation()})
@@ -54,6 +54,59 @@ $( document ).ready(function() {
     $("#al_an_topic_1").change(function(){topic_updated(1)})
     $("#al_rel_origin").change(function(){showRelsInPanel()})
 });
+
+
+var definitiontext = ''
+var fulldefinition = false
+
+function showdef(){
+    var cid = $("#al_highlights").val()    
+    for (var i in topics){
+	if (topics[i].label == cid){
+	    cid = topics[i].wdid
+	}
+    }
+    var obj = {'id': cid}
+    $.ajax({
+	type: "POST",
+	url: 'http://afel.insight-centre.org/ArguNest/pmiapi/def',
+	data: JSON.stringify(obj),
+	contentType: "application/json; charset=utf-8",
+	dataType: "json",
+	success: function(data){
+	    if(data.error){
+		alert("Error: "+data.error)
+	    }
+	    else {
+		fulldefinition = false
+		definitiontext = data.definition
+		$('#al_definition_text').html(definitiontext.substring(0,200))
+		if (definitiontext.length > 300){
+		    $('#al_definition_text').html(definitiontext.substring(0,300)+'...')
+		    $('#al_full_definition_but').css('display', 'inline')
+		    $('#al_full_definition_but').html('more...')
+		} else {
+		    $('#al_full_definition_but').css('display', 'none')
+		}
+	    }
+	},
+	failure: function(errMsg) {
+	    alert("Server error: "+errMsg)
+	}
+    });        
+}
+
+function toogleFullDefinition(){
+    if (fulldefinition){
+	fulldefinition=false
+	$('#al_definition_text').html(definitiontext.substring(0,300)+'...')	
+	$('#al_full_definition_but').html('more...')	
+    } else {
+	fulldefinition=true
+	$('#al_definition_text').html(definitiontext)
+	$('#al_full_definition_but').html('less...')		
+    }
+}
 
 function highlight(){
     var cid = $("#al_highlights").val()    
