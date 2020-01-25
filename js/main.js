@@ -142,12 +142,23 @@ function highlight(){
 		var dec = 1 / (items.length / 3)
 		var score = 1
 		$("#al_words_classes").html("")
+		var stst = ""		
 		for(var i in items){
 		    console.log(items[i][0]+" "+score)
-		    highlightword(items[i][0], score)
+		    stst += highlightword(items[i][0], score)
 		    score = score - dec
 		    if (score <= 0.0) break
-		}
+		}		
+		$("#al_highlight_panel").children().each(function(){
+		    var text = $(this).html()	
+		    for (var i in items){
+			var w = items[i][0]
+			text = text.replace(new RegExp('\\b'+w+'\\b', "g"),
+					    '<span class="al_word_'+w+'">'+w+'</span>')
+		    }
+		    $(this).html(text)
+		});							
+		$("#al_words_classes").text(stst)
 		// show definition
 	    }
 	},
@@ -158,14 +169,8 @@ function highlight(){
 }
 
 function highlightword(w,s){
-    $("#al_highlight_panel").children().each(function(){
-	var text = $(this).html()	
-	var ntext = text.replace(new RegExp('\\b'+w+'\\b', "g"),
-				 '<span class="al_word_'+w+'">'+w+'</span>')
-	$(this).html(ntext)
-    });
     var colour = 'rgba(255,150,150, '+s+')'
-    $("#al_words_classes").append('\n.al_word_'+w+'{border:0px; padding:0px; background: '+colour+'}')
+    return '\n.al_word_'+w+'{border:0px; padding:0px; background: '+colour+'}'
 }
 
 function init_annotation(){
