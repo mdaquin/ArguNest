@@ -80,7 +80,7 @@ function showdef(){
 	    }
 	    else {
 		fulldefinition = false
-		definitiontext = data.definition
+		definitiontext = data.definition.replace(/\\/g, '')
 		$('#al_definition_text').html(definitiontext.substring(0,200))
 		if (definitiontext.length > 300){
 		    $('#al_definition_text').html(definitiontext.substring(0,300)+'...')
