@@ -18,6 +18,7 @@ $( document ).ready(function() {
 	var sel = window.getSelection()
 	var len = sel.focusOffset-sel.anchorOffset
 	if (Math.abs(len)>5){
+	    $("#al_annotation_panel_sub").css("display", "block")
 	    currentSelection = {}
 	    console.log(sel.toString())
 	    currentSelection.start = sel.anchorOffset
@@ -357,6 +358,7 @@ function saveAnnotation(ann){
 
 function selectOnClick(aid){
     $(".al_ann").css("font-weight", "normal")
+    console.log("selected "+aid)
     $("#ann_"+aid).css("font-weight", "600")
     init_annotation()
     $("#al_delete_button").css("display", "inline")
@@ -386,6 +388,7 @@ function selectOnClick(aid){
 	console.log("annotation selected that does not exist...")
     }
     show_graph(aid, userkey)
+    $("#al_annotation_panel_sub").css("display", "block")
 }
 
 function fill_select(el){
@@ -430,6 +433,8 @@ function load_text(id){
 		    annotations[data.annotations[i].id] = data.annotations[i]
 		relations = data.relations
 		show_annotations()
+		$("#al_annotation_panel_sub").css("display", "none")
+		$("#al_annotation_panel").css("display", "block")
 	    }
 	},
 	failure: function(errMsg) {
@@ -644,7 +649,7 @@ function switchView(){
 	$("#al_annotation_panel").css("display", "none")
 	$("#al_l_graph_panel").css("display", "block")
 	$("#al_relation_panel").css("display", "block")
-	$("#al_switch_view").html("Switch to annotation view")
+	$("#al_switch_view").html("Switch to Annotation View")
 	show_large_graph(userkey, loadedtext)
 	fillRelSelect();
 	currentview="graph"
@@ -656,6 +661,6 @@ function switchView(){
 	$("#al_l_graph_panel").css("display", "none")
 	$("#al_relation_panel").css("display", "none")
 	currentview="annotation"
-	$("#al_switch_view").html("Switch to graph view")	
+	$("#al_switch_view").html("Switch to Graph View")	
     }
 }

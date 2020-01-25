@@ -19,6 +19,13 @@ h3 {
     font-size: 100%;
 }
 
+hr {
+    color: black;
+    background-color: black;
+    background: black;
+    height: 2px;
+}
+
 #al_login_dialog{
     position: fixed;
     top: 0;
@@ -136,6 +143,11 @@ h3 {
     color: #ffffff00;
 }
 
+#al_highlight_panel * {
+    border: 0px solid #ffffff00;
+}
+
+
 #al_l_graph_panel{
     background: #fff;
     height: calc(100vh - 50px);
@@ -182,6 +194,7 @@ h3 {
     height: calc(100vh - 100px);
     padding: 10px 20px 20px 20px;
     overflow-y: auto;
+    display: none;
 }
 
 #al_relation_panel{
@@ -300,4 +313,8 @@ h3 {
 
 #al_definition_text{
     font-size: 80%;
+}
+
+#al_annotation_panel_sub{
+    display: none;
 }

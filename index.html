@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/tooltips.css">    
     <title>ArguNest</title>
     <script src="js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="https://mbostock.github.com/d3/d3.js?2.6.0"></script>
@@ -22,7 +23,7 @@
     <div id="al_navbar">
       <div id="al_title">ArguNest</div>
       <a href="javascript:logout();" id="al_logout" class="al_button">Logout</a>
-      <a href="javascript:switchView();" class="al_button" id="al_switch_view">Switch to graph view</a>
+      <a href="javascript:switchView();" class="al_button" id="al_switch_view">Switch to Graph View</a>
       <a href="javascript:open_text()" id="al_open_file" class="al_button">Open Text</a>
     </div>
 
@@ -39,26 +40,52 @@
     <div id="al_l_graph_panel"> </div>
     
     <div id="al_annotation_panel">
-      <h2>Select a concept to be highlighted in the text</h2>
+      <h2>Select a <span class="tooltip">
+	  <span class="tooltiptext">
+	    A general idea or notion, a universal.	
+	  </span>
+	  concept</span> to see related terms in the text:</h2>
       <select id="al_highlights">
 	<option value="none">-- concept --</option>
 	<option value="text">Test</option>
       </select>
       <div id="al_definition_panel">
-	<h3>Definition of concept</h3>
+	<h3>Definition of <span class="tooltip">
+	  <span class="tooltiptext">
+	    A general idea or notion, a universal.	
+	  </span>
+	    concept</span> (from Wikipedia):</h3>
 	<div id="al_definition_text">
-	  <i>select a concept above to see its definition and highlights related terms from the text(s)</i>
+	  <i>Select a <span class="tooltip">
+	  <span class="tooltiptext">
+	    A general idea or notion, a universal.	
+	  </span>
+	      concept</span> above to see its definition.
+	  </i>
 	</div>
 	<a href="javascript:toogleFullDefinition();" id="al_full_definition_but">more...</a>
       </div>
       <hr />
       <div id="al_type_buttons">
 	<h3>Select parts of the text to annotate:</h3>
-      <input id="al_an_type_prop" class="al_radio" type="radio" name="an_type" value="proposition" checked><span class="al_rad_label">Proposition</span>
-	<input id="al_an_type_arg" class="al_radio" type="radio" name="an_type" value="argument"><span class="al_rad_label">Argument</span>
-      <a href="javascript:delete_annotation();" id="al_delete_button">delete annotation</a>
-      </div>
-      <input type="text" name="an_title" id="al_an_title" placeholder="add a summarised description/title of the proposition or argument"><br/>
+	<input id="al_an_type_prop" class="al_radio" type="radio" name="an_type" value="proposition" checked><span class="al_rad_label tooltip">
+	  <span class="tooltiptext">
+	    An opinion, judgment or belief held to be true– made justified by arguments. It
+	    has different expressions in texts, e.g. ‘Only humans can reason.’
+	  </span>
+	  Proposition</span>
+	<input id="al_an_type_arg" class="al_radio" type="radio" name="an_type" value="argument"><span class="al_rad_label tooltip">
+	  <span class="tooltiptext">
+	    A statement of the reasons for and against a proposition, which has different
+	    expressions in texts, e.g. ‘Only humans can use their understanding and intellect to overcome base instincts.’
+	  </span>
+	  Argument</span>
+	<div id="al_annotation_panel_sub">
+	  <a href="javascript:delete_annotation();" id="al_delete_button">
+	      delete
+	      annotation
+	  </a>
+      <input type="text" name="an_title" id="al_an_title" placeholder="Add a summarised description/title of the proposition or argument."><br/>
       <div id="al_ref_buttons">
 	<h3>This proposition or argument is:</h3>
 	<input class="al_radio" id="al_an_ref_stated" type="radio" name="an_ref" value="own" checked><span class="al_rad_label">Stated by the authors</span><br/>
@@ -74,32 +101,59 @@
       </div>
       <h3>Visualisation</h3>
       <div id="al_graph_panel"></div>      
-      <div style="margin-top: 10px; padding-right: 10px;" id="al_legend_panel">
+      <div style="margin-top: 10px; padding-right: 10px; border: 1px solid #aaa; border-radius: 10px; padding: 5px 5px 5px 5px" id="al_legend_panel">
       <p>
-      <span><span style="border-radius: 10px; background: #800; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;</span> selected annotation</span> 
-      <span><span style="border-radius: 10px; background: #74be74; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;</span> argument</span> 
-      <span><span style="border-radius: 10px; background: #7474be; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;</span> proposition</span> 
+	<span><span style="border-radius: 10px; background: #800; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;</span> selected <span class="tooltip">
+	  <span class="tooltiptext">
+	    The action of annotating or making notes.
+	  </span>
+	    annotation</span></span> 
+      <span><span style="border-radius: 10px; background: #74be74; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;</span>
+	<span class="tooltip">
+	  <span class="tooltiptext">
+	    A statement of the reasons for and against a proposition, which has different
+	    expressions in texts, e.g. ‘Only humans can use their understanding and intellect to overcome base instincts.’
+	  </span>
+	argument</span></span> 
+      <span><span style="border-radius: 10px; background: #7474be; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;</span> <span class="tooltip">
+	  <span class="tooltiptext">
+	    An opinion, judgment or belief held to be true– made justified by arguments. It
+	    has different expressions in texts, e.g. ‘Only humans can reason.’
+	  </span>
+	  proposition</span></span> 
       <span><span style="border-radius: 10px; background: #555; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;</span> subject</span> 
       </p>
       <p>
-	<span style="color: #ccc">___</span> subject</span> 
-        <span style="color: #5a5">___</span> supports</span> 
-        <span style="color: #a55">___</span> contradicts</span> 
+	<span style="color: #ccc; font-weight: 999">&mdash;</span> subject</span> 
+<span style="color: #5a5; font-weight: 999;">&mdash;</span>
+<span class="tooltip">
+	  <span class="tooltiptext">
+	    The relationship among propositions and
+	    arguments in relation to being in favour of a proposition
+	    or argument.
+	  </span>
+  supports</span></span> 
+<span style="color: #a55; font-weight: 999;">&mdash;</span> <span class="tooltip">
+	  <span class="tooltiptext">
+	    The relationship among propositions and
+	    arguments in relation to being against a proposition
+	    or argument.
+	  </span>
+  contradicts</span></span> 
       </p>
-    </div>
-    </div>
-
-    <div id="al_text_list_dialog"></div>
-
-    <div id="al_login_dialog">
-	<input type="text" name="useremail" id="al_useremail" placeholder="username"><br/>
-	<input type="password" name="userpassword" id="al_userpassword" placeholder="password"><br/>
-	<a class="al_button" href="javascript:login();">login</a>  <a class="al_button_2" href="javascript:register();">register</a>
-	<p id="al_login_message"></p>
-    </div>
+</div>
+</div> <!-- annotation pane -->
+</div>
+</div>
 
     <div id="al_relation_panel">
-      <h2>Create relation between proposition(s) and/or argument(s)</h2>
+      <h2>Create <span class="tooltip">
+	  <span class="tooltiptext">
+	    The relationship among propositions and
+	    arguments in relation to being in favour of (supports) or against (contradicts) a proposition
+	    or argument.
+	  </span>
+	  relation</span> between proposition(s) and/or argument(s)</h2>
       <select id="al_rel_origin">
 	<option val="none"> -- origin -- </option>
       </select>
@@ -114,21 +168,62 @@
       <a id="al_rel_ok" class="al_button" href="javascript:saveRelation();">OK</a>
       <div id="al_existing_rel">
       </div>
-      <div style="margin-top: 20px; padding-right: 10px;" id="al_legend_panel">
+      <div style="margin-top: 20px; padding-right: 10px; border: 1px solid #aaa; border-radius: 10px; padding: 5px 5px 5px 5px" id="al_legend_panel2">
       <p>
-      <span><span style="border-radius: 10px; background: #800; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;</span> selected annotation</span> 
-      <span><span style="border-radius: 10px; background: #74be74; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;</span> argument</span> 
-      <span><span style="border-radius: 10px; background: #7474be; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;</span> proposition</span> 
+	<span><span style="border-radius: 10px; background: #800; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;</span> selected
+	  <span class="tooltip">
+	  <span class="tooltiptext">
+	    The action of annotating or making notes.
+	  </span>	    
+	  annotation</span></span> 
+      <span><span style="border-radius: 10px; background: #74be74; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;</span>
+	<span class="tooltip">
+	  	  <span class="tooltiptext">
+	    A statement of the reasons for and against a proposition, which has different
+	    expressions in texts, e.g. ‘Only humans can use their understanding and intellect to overcome base instincts.’
+	  </span>
+	argument</span></span> 
+      <span><span style="border-radius: 10px; background: #7474be; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;</span> <span class="tooltip">
+	  <span class="tooltiptext">
+	    An opinion, judgment or belief held to be true– made justified by arguments. It
+	    has different expressions in texts, e.g. ‘Only humans can reason.’
+	  </span>
+	  proposition</span></span> 
       <span><span style="border-radius: 10px; background: #555; margin-bottom: 10px;">&nbsp;&nbsp;&nbsp;</span> subject</span> 
       </p>
       <p>
-	<span style="color: #ccc">___</span> subject</span> 
-        <span style="color: #5a5">___</span> supports</span> 
-        <span style="color: #a55">___</span> contradicts</span> 
+	<span style="color: #ccc; font-weight: 999">&mdash;</span> subject</span> 
+<span style="color: #5a5; font-weight: 999;">&mdash;</span>
+<span class="tooltip">
+  	  <span class="tooltiptext">
+	    The relationship among propositions and
+	    arguments in relation to being in favour of a proposition
+	    or argument.
+	  </span>
+supports</span></span> 
+<span style="color: #a55; font-weight: 999;">&mdash;</span>
+<span class="tooltip">
+  	  <span class="tooltiptext">
+	    The relationship among propositions and
+	    arguments in relation to being against a proposition
+	    or argument.
+	  </span>
+contradicts</span></span> 
       </p>
     </div>
     </div>
-    
+
+
+    <div id="al_text_list_dialog"></div>
+
+    <div id="al_login_dialog">
+	<input type="text" name="useremail" id="al_useremail" placeholder="username"><br/>
+	<input type="password" name="userpassword" id="al_userpassword" placeholder="password"><br/>
+	<a class="al_button" href="javascript:login();">login</a>  <a class="al_button_2" href="javascript:register();">register</a>
+	<p id="al_login_message"></p>
+    </div>
+
+
 
   </body>
 </html>
