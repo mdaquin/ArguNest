@@ -276,10 +276,13 @@ function update_annotation(){
     $('#ann_'+aid).removeAttr('onclick');
     $('#ann_'+aid).attr('onClick', 'selectOnClick("'+aid+'");');
     saveAnnotation(annotations[aid])
+    currentSelection.id = aid
 }
 
 function delete_annotation(){
     var aid = currentSelection.id
+    console.log(aid)
+    console.log(currentSelection)
     $("#ann_"+aid).replaceWith(function() {return $(this).html(); });
     annotations[aid] = undefined
     var obj = {"key": userkey, "aid": aid}
