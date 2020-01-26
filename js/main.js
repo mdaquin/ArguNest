@@ -34,14 +34,15 @@ $( document ).ready(function() {
 	}
     });
     $("#al_highlights").change(function(){highlight();showdef();})
-    $("#al_an_title").change(function(){update_annotation()})
-    $("#al_an_type_arg").change(function(){update_annotation()})
-    $("#al_an_type_prop").change(function(){update_annotation()})
+    $("#al_an_title").change(function(){allog("changed title", ""); update_annotation()})
+    $("#al_an_type_arg").change(function(){allog("switch ann type", "arg"); update_annotation()})
+    $("#al_an_type_prop").change(function(){allog("switch ann type", "prop"); update_annotation()})
     $("#al_an_ref_stated").change(function(){
 	if (document.getElementById("al_an_ref_other").checked)
 	    $("#al_reference").css("display","block")
 	else
 	    $("#al_reference").css("display","none")
+	allog("switch statement orig", "stated")
 	update_annotation()
     })
     $("#al_an_ref_other").change(function(){
@@ -49,19 +50,42 @@ $( document ).ready(function() {
 	    $("#al_reference").css("display","block")
 	else
 	    $("#al_reference").css("display","none")	    
+	allog("switch statement orig", "other")
 	update_annotation()
     })
-    $("#al_reference").change(function(){update_annotation()})
-    $("#al_an_topic_1").change(function(){topic_updated(1)})
-    $("#al_rel_origin").change(function(){showRelsInPanel()})
+    $("#al_reference").change(function(){allog("update reference", ""); update_annotation()})
+    $("#al_an_topic_1").change(function(){allog("update topic", ""); topic_updated(1)})
+    $("#al_rel_origin").change(function(){allog("chose rel origin", ""); showRelsInPanel()})
 });
 
 
 var definitiontext = ''
 var fulldefinition = false
 
+function allog(mess, par){
+    var obj = {"key": userkey, "message": mess, "param": par}
+    $.ajax({
+	type: "POST",
+	url: api_base+'log',
+	data: JSON.stringify(obj),
+	contentType: "application/json; charset=utf-8",
+	dataType: "json",
+	success: function(data){
+	    if(data.error){
+		alert("Error: "+data.error)
+	    }
+	    else {
+		console.log(data)
+	    }
+	},
+	failure: function(errMsg) {
+	    alert("Server error: "+errMsg)
+	}
+    });            
+}
+
 function showdef(){
-    var cid = $("#al_highlights").val()    
+    var cid = $("#al_highlights").val()
     for (var i in topics){
 	if (topics[i].label == cid){
 	    cid = topics[i].wdid
@@ -99,10 +123,12 @@ function showdef(){
 
 function toogleFullDefinition(){
     if (fulldefinition){
+	allog("swith full definition", "false")
 	fulldefinition=false
 	$('#al_definition_text').html(definitiontext.substring(0,300)+'...')	
 	$('#al_full_definition_but').html('more...')	
     } else {
+	allog("swith full definition", "true")
 	fulldefinition=true
 	$('#al_definition_text').html(definitiontext)
 	$('#al_full_definition_but').html('less...')		
@@ -116,6 +142,7 @@ function highlight(){
 	    cid = topics[i].wdid
 	}
     }
+    allog("highlight", cid)
     var text = $("#al_text_panel").text()
     var obj = {'id': cid, 'text': text}
     $("#al_highlight_panel").html(loadedtexttext)
@@ -147,19 +174,23 @@ function highlight(){
 		    console.log(items[i][0]+" "+score)
 		    stst += highlightword(items[i][0], score)
 		    score = score - dec
-		    if (score <= 0.0) break
+		    items[i].push(score)
+		    if (score <= 0.0) break		    
 		}		
 		$("#al_highlight_panel").children().each(function(){
 		    var text = $(this).html()	
 		    for (var i in items){
-			var w = items[i][0]
-			text = text.replace(new RegExp('\\b'+w+'\\b', "g"),
-					    '<span class="al_word_'+w+'">'+w+'</span>')
+			if (items[i].length == 3){
+			    var w = items[i][0]
+			    text = text.replace(new RegExp('\\b'+w+'\\b', "g"),
+						'<span class="al_word_'+w+'">'+w+'</span>')
+			} else{
+			    break
+			}
 		    }
 		    $(this).html(text)
 		});							
 		$("#al_words_classes").text(stst)
-		// show definition
 	    }
 	},
 	failure: function(errMsg) {
@@ -169,8 +200,11 @@ function highlight(){
 }
 
 function highlightword(w,s){
-    var colour = 'rgba(255,150,150, '+s+')'
-    return '\n.al_word_'+w+'{border:0px; padding:0px; background: '+colour+'}'
+    if (s > 0){
+	var colour = 'rgba(255,150,150, '+s+')'
+	return '\n.al_word_'+w+'{border:0px; padding:0px; background: '+colour+'}'
+    }
+    return ''
 }
 
 function init_annotation(){
@@ -196,14 +230,13 @@ function new_topic_select(){
     $("#al_an_topic_"+topic_count).change(function(){topic_updated(n)})
 }
 
-
 function topic_updated(n){
+    allog("change topic", "") 
     if (!$("#al_an_topic_"+(n+1)).length){
 	new_topic_select()
     }
     update_annotation()
 }
-
 
 function show_annotations(){
     for (var aid in annotations){
@@ -223,7 +256,6 @@ var funhash = function(s) {
         h = Math.imul(h ^ s.charCodeAt(i), 2654435761);
     return (h ^ h >>> 16) >>> 0;
 }
-
 
 function create_annotation_span(aid, atext){
     text = $("#al_text_panel").html()
@@ -245,6 +277,7 @@ function update_annotation(){
 	    aid = userkey+"-"+loadedtext+"-"+funhash(currentSelection.text)
 	}
     }
+    allog("updating annotation", aid)
     var atext = currentSelection.text
     if ($("#ann_"+aid).length && annotations[aid]){
 	atext = annotations[aid].text
@@ -281,6 +314,7 @@ function update_annotation(){
 
 function delete_annotation(){
     var aid = currentSelection.id
+    allog("deleting annotation", aid)
     console.log(aid)
     console.log(currentSelection)
     $("#ann_"+aid).replaceWith(function() {return $(this).html(); });
@@ -310,6 +344,7 @@ function delete_annotation(){
 function deleteRelation(o,r,t){
     var obj = {key: userkey, doc: loadedtext,
 	       origin:o, relation:r, target:t}
+    allog("deleting relation", o+"-"+r+"-"+t)
     init_annotation()
     $.ajax({
 	type: "POST",
@@ -340,8 +375,6 @@ function deleteRelation(o,r,t){
     });        
 }
 
-
-
 function saveAnnotation(ann){
     $.ajax({
 	type: "POST",
@@ -367,6 +400,7 @@ function saveAnnotation(ann){
 function selectOnClick(aid){
     $(".al_ann").css("font-weight", "normal")
     console.log("selected "+aid)
+    allog("selected annotation", aid)
     $("#ann_"+aid).css("font-weight", "600")
     init_annotation()
     $("#al_delete_button").css("display", "inline")
@@ -416,6 +450,7 @@ function load_text(id){
     if (!is_loggedin()) {showlogin(); return;}
     init_annotation()
     loadedtext=id
+    allog("loading text", id)
     $.ajax({
 	type: "POST",
 	url: api_base+'text',
@@ -455,6 +490,7 @@ function load_text(id){
 function open_text(){
     if (currentview=="graph") switchView();
     if (!is_loggedin()) {showlogin(); return;}
+    allog("opening text", "")
     $.ajax({
 	type: "POST",
 	url: api_base+'texts',
@@ -488,6 +524,7 @@ function showlogin(){
 }
 
 function logout(){
+    allog("logout", "")    
     userkey = undefined;
     $("#al_useremail").val("")
     $("#al_userpassword").val("")
@@ -517,7 +554,8 @@ function login(){
 	    if(data.error)
 		$('#al_login_message').html("Error: "+data.error)
 	    else {
-		userkey = data.key		
+		userkey = data.key
+		allog("login", "")
 		$('#al_login_message').html("Success: "+data.message)
 		$('#al_login_dialog').css('display', 'none')
 	    }
@@ -573,6 +611,7 @@ function saveRelation(){
     var origin = $("#al_rel_origin").val()
     var rel    = $("#al_relation").val()
     var target = $("#al_rel_target").val()
+    allog("saving relation", origin+"-"+rel+"-"+target)
     if (!relations[origin]) relations[origin] = {}
     if (!relations[origin][rel]) relations[origin][rel] = []
     relations[origin][rel].push(target)
@@ -608,21 +647,21 @@ function saveRel(origin, rel, target){
     });
 }
 
-
 function showRelsInPanel(){
     var origin = $("#al_rel_origin").val()
     console.log("origin: "+origin)
     console.log(relations[origin])    
     var st = "<h2>"+annotations[origin].type+": "+annotations[origin].title+"</h2>"
-    if (relations[origin]){
+    if (relations[origin]){	
 	if (relations[origin]["same"]){
 	    st += '<h3>existing "same" relation</h3>'
 	    for (var i in relations[origin]["same"]){
 		st+= '<div class="al_ex_rel">'
 		var target = relations[origin]["same"][i]
-		console.log("target: "+target)		
-		st += annotations[target].type+": "+annotations[target].title
-		st += ' <a href="javascript:deleteRelation(\''+origin+'\',\'same\',\''+target+'\');">(delete)</a>'
+		if (annotations[target]){
+		    st += annotations[target].type+": "+annotations[target].title
+		    st += ' <a href="javascript:deleteRelation(\''+origin+'\',\'same\',\''+target+'\');">(delete)</a>'
+		}
 		st+= '</div>'
 	    }	    
 	}
@@ -631,8 +670,10 @@ function showRelsInPanel(){
 	    for (var i in relations[origin]["supports"]){
 		st+= '<div class="al_ex_rel">'
 		var target = relations[origin]["supports"][i]
-		st += annotations[target].type+": "+annotations[target].title
-		st += ' <a href="javascript:deleteRelation(\''+origin+'\',\'supports\',\''+target+'\');">(delete)</a>'
+		if (annotations[target]){
+		    st += annotations[target].type+": "+annotations[target].title
+		    st += ' <a href="javascript:deleteRelation(\''+origin+'\',\'supports\',\''+target+'\');">(delete)</a>'
+		}
 		st+= '</div>'
 	    }	    
 	}
@@ -641,8 +682,10 @@ function showRelsInPanel(){
 	    for (var i in relations[origin]["contradicts"]){
 		st+= '<div class="al_ex_rel">'
 		var target = relations[origin]["contradicts"][i]
-		st += annotations[target].type+": "+annotations[target].title
-		st += ' <a href="javascript:deleteRelation(\''+origin+'\',\'contradicts\',\''+target+'\');">(delete)</a>'
+		if (annotations[target]){
+		    st += annotations[target].type+": "+annotations[target].title
+		    st += ' <a href="javascript:deleteRelation(\''+origin+'\',\'contradicts\',\''+target+'\');">(delete)</a>'
+		}
 		st+= '</div>'
 	    }	    
 	}	
@@ -652,6 +695,7 @@ function showRelsInPanel(){
 
 function switchView(){
     if (currentview=="annotation"){
+	allog("switch view", "graph")
 	$("#al_text_panel").css("display", "none")
 	$("#al_highlight_panel").css("display", "none")	
 	$("#al_annotation_panel").css("display", "none")
@@ -663,6 +707,7 @@ function switchView(){
 	currentview="graph"
 	showRelsInPanel();
     } else {
+	allog("switch view", "annotation")
 	$("#al_text_panel").css("display", "block")
 	$("#al_highlight_panel").css("display", "block")	
 	$("#al_annotation_panel").css("display", "block")
