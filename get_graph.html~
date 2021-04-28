@@ -34,7 +34,7 @@
       <div style="width: 100%; text-align: center; margin-top: 50px;">
 	   Open a text (top right button) to get started.
 	   </div>
-<!--      <img style="width: 33%; margin-left: 33%; margin-top: 50px;" src="imgs/drawing.jpg" /> -->
+      <img style="width: 33%; margin-left: 33%; margin-top: 50px;" src="imgs/drawing.jpg" />
     </div>
 
     <div id="al_l_graph_panel"> </div>
